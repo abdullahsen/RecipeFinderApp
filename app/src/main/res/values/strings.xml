@@ -5,4 +5,16 @@
     <string name="title_notifications">Notifications</string>
     <string name="splash_screen_title">Recipe Finder</string>
     <string name="add_recipe">Add Recipe</string>
+
+    <string name="image_content_description">image</string>
+    <string name="label_title">Title</string>
+    <string name="label_type">Type</string>
+    <string name="label_category">Category</string>
+    <string name="label_ingredients">Ingredients</string>
+    <string name="label_cooking_time_in_minutes">Cooking Time In Minutes</string>
+    <string name="label_direction_to_cook">Direction To Cook</string>
+    <string name="label_add_dish">ADD RECIPE</string>
+    <string name="title_select_image_action">Select Image Action</string>
+    <string name="label_camera">Camera</string>
+    <string name="label_gallery">Gallery</string>
 </resources>

@@ -11,7 +11,8 @@
         android:theme="@style/Theme.RecipeFinderApp">
         <activity
             android:name=".view.activities.AddUpdateRecipeActivity"
-            android:theme="@style/Theme.RecipeFinderApp.NoActionBar" />
+            android:theme="@style/Theme.RecipeFinderApp.NoActionBar"
+            android:configChanges="orientation"/>
         <activity
             android:name=".view.activities.SplashActivity"
             android:theme="@style/Theme.RecipeFinderApp.NoActionBar">
