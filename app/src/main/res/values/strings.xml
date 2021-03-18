@@ -17,4 +17,16 @@
     <string name="title_select_image_action">Select Image Action</string>
     <string name="label_camera">Camera</string>
     <string name="label_gallery">Gallery</string>
+
+    <string name="title_select_dish_type">SELECT DISH TYPE</string>
+    <string name="title_select_dish_category">SELECT DISH CATEGORY</string>
+    <string name="title_select_dish_cooking_time">SELECT COOKING TIME IN MINUTES</string>
+
+    <string name="err_msg_select_recipe_image">Select recipe image.</string>
+    <string name="err_msg_enter_recipe_title">Enter recipe title.</string>
+    <string name="err_msg_select_recipe_type">Select recipe type.</string>
+    <string name="err_msg_select_recipe_category">Select recipe category.</string>
+    <string name="err_msg_enter_recipe_ingredients">Enter recipe ingredients.</string>
+    <string name="err_msg_select_recipe_cooking_time">Select recipe cooking time.</string>
+    <string name="err_msg_enter_recipe_cooking_instructions">Enter recipe cooking instructions.</string>
 </resources>
