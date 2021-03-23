@@ -14,6 +14,7 @@ data class Recipe(
     @ColumnInfo val category:String,
     @ColumnInfo val ingredients: String,
     @ColumnInfo(name = "cooking_time") val cookingTime: String,
+    @ColumnInfo(name = "cooking_direction") val cookingDirection: String,
     @ColumnInfo(name = "favourite_recipe") val favouriteRecipe: Boolean
 ) {
 }

@@ -19,15 +19,20 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abdullahsen.recipefinderapp.R
+import com.abdullahsen.recipefinderapp.RecipeFinderApplication
+import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.databinding.ActivityAddUpdateRecipeBinding
 import com.abdullahsen.recipefinderapp.databinding.DialogImageSelectionBinding
 import com.abdullahsen.recipefinderapp.databinding.DialogListBinding
 import com.abdullahsen.recipefinderapp.utils.Constants
 import com.abdullahsen.recipefinderapp.view.adapters.ListAdapter
+import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
+import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -53,6 +58,10 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
         private const val CAMERA_REQUEST_CODE = 1402
         private const val GALLERY_REQUEST_CODE = 3506
         private const val IMAGE_DIRECTORY = "recipefinderapp"
+    }
+
+    private val mRecipeViewModel: RecipeViewModel by viewModels {
+        RecipeViewModelFactory((application as RecipeFinderApplication).repository)
     }
 
     private lateinit var mBinding: ActivityAddUpdateRecipeBinding
@@ -94,63 +103,103 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                     customListItemsDialogHandler(
                         resources.getString(R.string.title_select_dish_type),
                         Constants.dishTypes(),
-                        Constants.DISH_TYPE)
+                        Constants.DISH_TYPE
+                    )
                     return
                 }
                 R.id.edit_text_category -> {
                     customListItemsDialogHandler(
                         resources.getString(R.string.title_select_dish_category),
                         Constants.dishCategories(),
-                        Constants.DISH_CATEGORY)
+                        Constants.DISH_CATEGORY
+                    )
                     return
                 }
                 R.id.edit_text_cooking_time -> {
                     customListItemsDialogHandler(
                         resources.getString(R.string.title_select_dish_cooking_time),
                         Constants.dishCookTime(),
-                        Constants.DISH_COOKING_TIME)
+                        Constants.DISH_COOKING_TIME
+                    )
                     return
                 }
                 R.id.button_add_recipe -> {
-                    val title = mBinding.editTextTitle.toString().trim()
-                    val type = mBinding.editTextType.toString().trim()
-                    val category = mBinding.editTextCategory.toString().trim()
-                    val ingredients = mBinding.editTextIngredients.toString().trim()
-                    val cookingTimeInMinutes = mBinding.editTextCookingTime.toString().trim()
-                    val cookingDirection = mBinding.editTextDirectionToCook.toString().trim()
+                    val title = mBinding.editTextTitle.text.toString().trim()
+                    val type = mBinding.editTextType.text.toString().trim()
+                    val category = mBinding.editTextCategory.text.toString().trim()
+                    val ingredients = mBinding.editTextIngredients.text.toString().trim()
+                    val cookingTimeInMinutes = mBinding.editTextCookingTime.text.toString().trim()
+                    val cookingDirection = mBinding.editTextDirectionToCook.text.toString().trim()
 
-                    when{
+                    when {
                         TextUtils.isEmpty(imagePath) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                            resources.getString(R.string.err_msg_select_recipe_image), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_select_recipe_image),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         TextUtils.isEmpty(title) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                                resources.getString(R.string.err_msg_enter_recipe_title), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_enter_recipe_title),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         TextUtils.isEmpty(type) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                                resources.getString(R.string.err_msg_select_recipe_type), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_select_recipe_type),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         TextUtils.isEmpty(category) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                                resources.getString(R.string.err_msg_select_recipe_category), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_select_recipe_category),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         TextUtils.isEmpty(ingredients) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                                resources.getString(R.string.err_msg_enter_recipe_ingredients), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_enter_recipe_ingredients),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         TextUtils.isEmpty(cookingTimeInMinutes) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                                resources.getString(R.string.err_msg_select_recipe_cooking_time), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_select_recipe_cooking_time),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         TextUtils.isEmpty(cookingDirection) -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                                resources.getString(R.string.err_msg_enter_recipe_cooking_instructions), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                resources.getString(R.string.err_msg_enter_recipe_cooking_instructions),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         else -> {
-                            Toast.makeText(this@AddUpdateRecipeActivity,
-                               "All the entries are valid.", Toast.LENGTH_LONG).show()
+                            val recipeDetails: Recipe = Recipe(
+                                image = imagePath,
+                                imageSource = Constants.DISH_IMAGE_SOURCE_LOCAL,
+                                title = title,
+                                category = category,
+                                type = type,
+                                ingredients = ingredients,
+                                cookingTime = cookingTimeInMinutes,
+                                cookingDirection = cookingDirection,
+                                favouriteRecipe = false
+                            )
+                            mRecipeViewModel.insert(recipeDetails)
+                            Toast.makeText(
+                                this@AddUpdateRecipeActivity,
+                                "You have succesfully added the recipe.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            finish()
                         }
                     }
                 }
@@ -178,6 +227,7 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                         }
                     }
                 }
+
                 override fun onPermissionRationaleShouldBeShown(
                     permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
@@ -230,7 +280,7 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                         val thumbnail: Bitmap = data.extras!!.get("data") as Bitmap
                         Glide.with(this).load(thumbnail).centerCrop().into(mBinding.imageViewRecipe)
                         imagePath = saveImageToInternalStorage(thumbnail)
-                        Log.i(TAG,imagePath)
+                        Log.i(TAG, imagePath)
                         mBinding.imageViewAddRecipe.setImageDrawable(
                             ContextCompat.getDrawable(
                                 this,
@@ -247,7 +297,7 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                             .load(selectedImageUri)
                             .centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(object :RequestListener<Drawable>{
+                            .listener(object : RequestListener<Drawable> {
                                 override fun onLoadFailed(
                                     e: GlideException?,
                                     model: Any?,
@@ -266,7 +316,7 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                                     isFirstResource: Boolean
                                 ): Boolean {
                                     resource?.let {
-                                        val bitmap:Bitmap =resource.toBitmap()
+                                        val bitmap: Bitmap = resource.toBitmap()
                                         imagePath = saveImageToInternalStorage(bitmap)
                                         Log.i(TAG, imagePath)
                                     }
@@ -284,21 +334,21 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
             }
-        }else if (resultCode == Activity.RESULT_CANCELED){
+        } else if (resultCode == Activity.RESULT_CANCELED) {
             Log.d(TAG, "Image selection cancelled!!!")
         }
     }
 
-    private fun saveImageToInternalStorage(bitmap: Bitmap):String{
+    private fun saveImageToInternalStorage(bitmap: Bitmap): String {
         val wrapper = ContextWrapper(applicationContext)
         var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
-        file = File(file,"${UUID.randomUUID()}.jpeg")
+        file = File(file, "${UUID.randomUUID()}.jpeg")
         try {
-            val stream:OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             stream.flush()
             stream.close()
-        }catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
         }
         return file.absolutePath
@@ -324,21 +374,25 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
         }.show()
     }
 
-    private fun customListItemsDialogHandler(title:String, itemsList: List<String>, selection:String){
+    private fun customListItemsDialogHandler(
+        title: String,
+        itemsList: List<String>,
+        selection: String
+    ) {
         mCustomListDialog = Dialog(this)
-        val binding:DialogListBinding = DialogListBinding.inflate(layoutInflater)
+        val binding: DialogListBinding = DialogListBinding.inflate(layoutInflater)
         mCustomListDialog.setContentView(binding.root)
 
         binding.textViewTitle.text = title
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ListAdapter(this,itemsList, selection)
+        val adapter = ListAdapter(this, itemsList, selection)
         binding.recyclerViewList.adapter = adapter
         mCustomListDialog.show()
     }
 
-    fun selectedListItem(item:String, selection:String){
-        when(selection){
+    fun selectedListItem(item: String, selection: String) {
+        when (selection) {
             Constants.DISH_TYPE -> {
                 mCustomListDialog.dismiss()
                 mBinding.editTextType.setText(item)

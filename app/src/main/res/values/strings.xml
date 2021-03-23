@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RecipeFinderApp</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_all_recipes">All</string>
+    <string name="title_favourite_recipes">Favourite</string>
+    <string name="title_random_recipe">Random Recipe</string>
     <string name="splash_screen_title">Recipe Finder</string>
     <string name="add_recipe">Add Recipe</string>
 
@@ -29,4 +29,7 @@
     <string name="err_msg_enter_recipe_ingredients">Enter recipe ingredients.</string>
     <string name="err_msg_select_recipe_cooking_time">Select recipe cooking time.</string>
     <string name="err_msg_enter_recipe_cooking_instructions">Enter recipe cooking instructions.</string>
+
+    <string name="label_no_recipes_added_yet">No recipes added yet!!!</string>
+
 </resources>
