@@ -31,5 +31,8 @@
     <string name="err_msg_enter_recipe_cooking_instructions">Enter recipe cooking instructions.</string>
 
     <string name="label_no_recipes_added_yet">No recipes added yet!!!</string>
+    <string name="title_recipe_details">Recipe Details</string>
+
+    <string name="label_estimate_cooking_time">The approx time required to cook the dish is %1$s minutes.</string>
 
 </resources>

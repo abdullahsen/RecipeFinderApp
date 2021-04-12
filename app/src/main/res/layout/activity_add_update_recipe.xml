@@ -201,7 +201,7 @@
                     android:id="@+id/image_view_recipe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/dish_image_backgroud"
+                    android:background="@color/recipe_image_background"
                     android:scaleType="fitXY"
                     tools:srcCompat="@tools:sample/avatars" />
 

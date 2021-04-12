@@ -17,8 +17,11 @@
     <color name="secondaryDarkColor">#c63f17</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#000000</color>
-    <color name="dish_image_backgroud">#E1E1E1</color>
+    <color name="recipe_image_background">#E1E1E1</color>
     <color name="grey_900">#212121</color>
     <color name="blue_grey_700">#37474f</color>
     <color name="divider_line_color">#e0e0e0</color>
+
+    <color name="blue_grey_900">#263238</color>
+    <color name="grey_500">#9E9E9E</color>
 </resources>

@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.abdullahsen.recipefinderapp.R
 import com.abdullahsen.recipefinderapp.RecipeFinderApplication
+import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.databinding.FragmentAllRecipesBinding
 import com.abdullahsen.recipefinderapp.view.activities.AddUpdateRecipeActivity
+import com.abdullahsen.recipefinderapp.view.activities.MainActivity
 import com.abdullahsen.recipefinderapp.view.adapters.RecipeAdapter
 import com.abdullahsen.recipefinderapp.viewmodel.HomeViewModel
 import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
@@ -62,6 +65,20 @@ class AllRecipesFragment : Fragment() {
             }
         }
 
+    }
+
+    fun navigateToRecipeDetails(recipe: Recipe){
+        findNavController().navigate(AllRecipesFragmentDirections.actionNavigationAllRecipesToNavigationRecipeDetails(recipe))
+        if(requireActivity() is MainActivity){
+            (activity as MainActivity?)!!.hideBottomNavigationView()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(requireActivity() is MainActivity){
+            (activity as MainActivity?)!!.showBottomNavigationView()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

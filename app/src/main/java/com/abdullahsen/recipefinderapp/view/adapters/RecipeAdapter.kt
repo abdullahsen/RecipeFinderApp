@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.databinding.ItemRecipeLayoutBinding
+import com.abdullahsen.recipefinderapp.view.fragments.AllRecipesFragment
 import com.bumptech.glide.Glide
 
 class RecipeAdapter(private val fragment:Fragment):RecyclerView.Adapter<RecipeAdapter.ViewHolder> (){
@@ -30,6 +31,11 @@ class RecipeAdapter(private val fragment:Fragment):RecyclerView.Adapter<RecipeAd
             .load(recipe.image)
             .into(holder.imageViewRecipeImage)
         holder.textViewRecipeTitle.text = recipe.title
+        holder.itemView.setOnClickListener {
+            if(fragment is AllRecipesFragment){
+                fragment.navigateToRecipeDetails(recipe)
+            }
+        }
     }
 
     override fun getItemCount() = recipes.size
