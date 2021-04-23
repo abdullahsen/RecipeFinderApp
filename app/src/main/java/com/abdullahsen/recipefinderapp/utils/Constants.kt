@@ -1,14 +1,20 @@
 package com.abdullahsen.recipefinderapp.utils
 
 object Constants {
-    const val DISH_TYPE: String = "DishType"
-    const val DISH_CATEGORY: String = "DishCategory"
-    const val DISH_COOKING_TIME: String = "DishCookingTime"
+    const val RECIPE_TYPE: String = "RecipeType"
+    const val RECIPE_CATEGORY: String = "RecipeCategory"
+    const val RECIPE_COOKING_TIME: String = "RecipeCookingTime"
 
-    const val DISH_IMAGE_SOURCE_LOCAL = "local"
-    const val DISH_IMAGE_SOURCE_REMOTE = "remote"
+    const val RECIPE_IMAGE_SOURCE_LOCAL = "local"
+    const val RECIPE_IMAGE_SOURCE_REMOTE = "remote"
 
-    fun dishTypes(): ArrayList<String> {
+    const val EXTRA_RECIPE_DETAILS = "RecipeDetails"
+
+    const val ALL_ITEMS = "All"
+    const val FILTER_SELECTION = "FilterSelection"
+
+
+    fun recipeTypes(): ArrayList<String> {
         val list = ArrayList<String>()
         list.add("breakfast")
         list.add("lunch")
@@ -21,7 +27,7 @@ object Constants {
         return list
     }
 
-    fun dishCategories(): ArrayList<String> {
+    fun recipeCategories(): ArrayList<String> {
         val list = ArrayList<String>()
         list.add("Pizza")
         list.add("BBQ")
@@ -40,7 +46,7 @@ object Constants {
         return list
     }
 
-    fun dishCookTime(): ArrayList<String> {
+    fun recipeCookTime(): ArrayList<String> {
         val list = ArrayList<String>()
         list.add("10")
         list.add("15")

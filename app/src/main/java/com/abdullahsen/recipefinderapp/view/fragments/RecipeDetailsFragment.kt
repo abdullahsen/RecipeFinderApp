@@ -6,9 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.abdullahsen.recipefinderapp.R
+import com.abdullahsen.recipefinderapp.RecipeFinderApplication
 import com.abdullahsen.recipefinderapp.databinding.FragmentRecipeDetailsBinding
+import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
+import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModelFactory
 import com.bumptech.glide.Glide
 import java.io.IOException
 import java.util.*
@@ -16,6 +21,10 @@ import java.util.*
 class RecipeDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentRecipeDetailsBinding
+
+    private val recipeViewModel: RecipeViewModel by viewModels{
+        RecipeViewModelFactory((requireActivity().application as RecipeFinderApplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +62,35 @@ class RecipeDetailsFragment : Fragment() {
             binding.textViewIngredients.text = it.recipeDetails.ingredients
             binding.textViewCookingDirection.text = it.recipeDetails.cookingDirection
             binding.textViewCookingTime.text = resources.getString(R.string.label_estimate_cooking_time, it.recipeDetails.cookingTime)
+
+            if(it.recipeDetails.favouriteRecipe){
+                binding.imageViewFavoriteRecipe.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_selected
+                ))
+            }else{
+                binding.imageViewFavoriteRecipe.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_unselected
+                ))
+            }
+        }
+
+        binding.imageViewFavoriteRecipe.setOnClickListener {
+            args.recipeDetails.favouriteRecipe = !args.recipeDetails.favouriteRecipe
+            recipeViewModel.update(args.recipeDetails)
+
+            if(args.recipeDetails.favouriteRecipe){
+                binding.imageViewFavoriteRecipe.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_selected
+                ))
+            }else{
+                binding.imageViewFavoriteRecipe.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_unselected
+                ))
+            }
         }
 
     }

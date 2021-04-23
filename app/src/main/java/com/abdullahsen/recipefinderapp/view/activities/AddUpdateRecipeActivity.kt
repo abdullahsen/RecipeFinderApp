@@ -67,6 +67,7 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mBinding: ActivityAddUpdateRecipeBinding
     private var imagePath: String = ""
     private lateinit var mCustomListDialog: Dialog
+    private var recipeDetails: Recipe? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +75,28 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
         mBinding = ActivityAddUpdateRecipeBinding.inflate(layoutInflater)
 
         setContentView(mBinding.root)
-
+        
+        if(intent.hasExtra(Constants.EXTRA_RECIPE_DETAILS)){
+            recipeDetails = intent.getParcelableExtra(Constants.EXTRA_RECIPE_DETAILS)
+        }
         setupActionBar()
+        recipeDetails?.let {
+            if(it.id!=0L){
+                imagePath = it.image
+                Glide.with(this@AddUpdateRecipeActivity)
+                    .load(imagePath)
+                    .centerCrop()
+                    .into(mBinding.imageViewRecipe)
+
+                mBinding.editTextTitle.setText(it.title)
+                mBinding.editTextType.setText(it.type)
+                mBinding.editTextCategory.setText(it.category)
+                mBinding.editTextIngredients.setText(it.ingredients)
+                mBinding.editTextCookingTime.setText(it.cookingTime)
+                mBinding.editTextDirectionToCook.setText(it.cookingDirection)
+                mBinding.buttonAddRecipe.text =  resources.getText(R.string.label_update_recipe)
+            }
+        }
 
         mBinding.imageViewAddRecipe.setOnClickListener(this)
         mBinding.editTextCategory.setOnClickListener(this)
@@ -86,6 +107,17 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setupActionBar() {
         setSupportActionBar(mBinding.toolbarAddRecipeActivity)
+
+        if(recipeDetails != null && recipeDetails!!.id != 0L){
+            supportActionBar?.let {
+                it.title = resources.getString(R.string.title_edit_recipe)
+            }
+        }else{
+            supportActionBar?.let {
+                it.title = resources.getString(R.string.title_add_recipe)
+            }
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mBinding.toolbarAddRecipeActivity.setNavigationOnClickListener {
             onBackPressed()
@@ -102,24 +134,24 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.edit_text_type -> {
                     customListItemsDialogHandler(
                         resources.getString(R.string.title_select_dish_type),
-                        Constants.dishTypes(),
-                        Constants.DISH_TYPE
+                        Constants.recipeTypes(),
+                        Constants.RECIPE_TYPE
                     )
                     return
                 }
                 R.id.edit_text_category -> {
                     customListItemsDialogHandler(
                         resources.getString(R.string.title_select_dish_category),
-                        Constants.dishCategories(),
-                        Constants.DISH_CATEGORY
+                        Constants.recipeCategories(),
+                        Constants.RECIPE_CATEGORY
                     )
                     return
                 }
                 R.id.edit_text_cooking_time -> {
                     customListItemsDialogHandler(
                         resources.getString(R.string.title_select_dish_cooking_time),
-                        Constants.dishCookTime(),
-                        Constants.DISH_COOKING_TIME
+                        Constants.recipeCookTime(),
+                        Constants.RECIPE_COOKING_TIME
                     )
                     return
                 }
@@ -182,23 +214,47 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
                             ).show()
                         }
                         else -> {
+                            var recipeId = 0L
+                            var imageSource = Constants.RECIPE_IMAGE_SOURCE_LOCAL
+                            var favouriteRecipe = false
+
+                            recipeDetails?.let {
+                                if(it.id !=0L){
+                                    recipeId = it.id
+                                    imageSource = it.imageSource
+                                    favouriteRecipe = it.favouriteRecipe
+                                }
+                            }
+
                             val recipeDetails: Recipe = Recipe(
                                 image = imagePath,
-                                imageSource = Constants.DISH_IMAGE_SOURCE_LOCAL,
+                                imageSource = imageSource,
                                 title = title,
                                 category = category,
                                 type = type,
                                 ingredients = ingredients,
                                 cookingTime = cookingTimeInMinutes,
                                 cookingDirection = cookingDirection,
-                                favouriteRecipe = false
+                                favouriteRecipe = favouriteRecipe,
+                                id = recipeId
                             )
-                            mRecipeViewModel.insert(recipeDetails)
-                            Toast.makeText(
-                                this@AddUpdateRecipeActivity,
-                                "You have succesfully added the recipe.",
-                                Toast.LENGTH_LONG
-                            ).show()
+
+                            if(recipeId == 0L){
+                                mRecipeViewModel.insert(recipeDetails)
+                                Toast.makeText(
+                                    this@AddUpdateRecipeActivity,
+                                    "You have succesfully added the recipe.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }else{
+                                mRecipeViewModel.update(recipeDetails)
+                                Toast.makeText(
+                                    this@AddUpdateRecipeActivity,
+                                    "You have succesfully updated the recipe.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
                             finish()
                         }
                     }
@@ -386,22 +442,22 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
         binding.textViewTitle.text = title
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ListAdapter(this, itemsList, selection)
+        val adapter = ListAdapter(this,null, itemsList, selection)
         binding.recyclerViewList.adapter = adapter
         mCustomListDialog.show()
     }
 
     fun selectedListItem(item: String, selection: String) {
         when (selection) {
-            Constants.DISH_TYPE -> {
+            Constants.RECIPE_TYPE -> {
                 mCustomListDialog.dismiss()
                 mBinding.editTextType.setText(item)
             }
-            Constants.DISH_CATEGORY -> {
+            Constants.RECIPE_CATEGORY -> {
                 mCustomListDialog.dismiss()
                 mBinding.editTextCategory.setText(item)
             }
-            Constants.DISH_COOKING_TIME -> {
+            Constants.RECIPE_COOKING_TIME -> {
                 mCustomListDialog.dismiss()
                 mBinding.editTextCookingTime.setText(item)
             }

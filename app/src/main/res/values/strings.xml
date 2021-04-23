@@ -5,6 +5,8 @@
     <string name="title_random_recipe">Random Recipe</string>
     <string name="splash_screen_title">Recipe Finder</string>
     <string name="add_recipe">Add Recipe</string>
+    <string name="filter_recipe">Filter Recipe</string>
+    <string name="select_item_to_filter">Select Item to Filter</string>
 
     <string name="image_content_description">image</string>
     <string name="label_title">Title</string>
@@ -34,5 +36,18 @@
     <string name="title_recipe_details">Recipe Details</string>
 
     <string name="label_estimate_cooking_time">The approx time required to cook the dish is %1$s minutes.</string>
+    <string name="label_no_favourite_recipes_added_yet">No favourite recipes added yet!!!</string>
+    <string name="action_edit_recipe">Edit Recipe</string>
+    <string name="action_delete_recipe">Delete Recipe</string>
+    <string name="title_edit_recipe">Edit Recipe</string>
+    <string name="title_delete_recipe">Delete Recipe</string>
+    <string name="title_add_recipe">Add Recipe</string>
+
+    <string name="label_update_recipe">Update Recipe</string>
+
+    <string name="message_delete_recipe_dialog">Are you sure you want to delete %1$s.</string>
+    <string name="label_yes">Yes</string>
+    <string name="label_no">No</string>
+
 
 </resources>

@@ -14,6 +14,19 @@ class RecipeViewModel(private val repository: RecipeRepository):ViewModel() {
 
     val allRecipesList:LiveData<List<Recipe>> = repository.getAllRecipesList.asLiveData()
 
+    fun update(recipe:Recipe) = viewModelScope.launch {
+        repository.updateRecipeData(recipe)
+    }
+
+    val allFavouriteRecipesList:LiveData<List<Recipe>> = repository.getAllFavouriteRecipesList.asLiveData()
+
+    fun delete(recipe: Recipe) = viewModelScope.launch {
+        repository.deleteRecipeData(recipe)
+    }
+
+    fun getFilteredRecipesList(value: String): LiveData<List<Recipe>> =
+        repository.filteredListRecipes(value).asLiveData()
+
 }
 
 class RecipeViewModelFactory(private val repository: RecipeRepository):ViewModelProvider.Factory{

@@ -18,5 +18,5 @@ data class Recipe(
     @ColumnInfo val ingredients: String,
     @ColumnInfo(name = "cooking_time") val cookingTime: String,
     @ColumnInfo(name = "cooking_direction") val cookingDirection: String,
-    @ColumnInfo(name = "favourite_recipe") val favouriteRecipe: Boolean
+    @ColumnInfo(name = "favourite_recipe") var favouriteRecipe: Boolean
 ) : Parcelable
