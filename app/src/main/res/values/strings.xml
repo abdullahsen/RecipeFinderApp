@@ -48,6 +48,10 @@
     <string name="message_delete_recipe_dialog">Are you sure you want to delete %1$s.</string>
     <string name="label_yes">Yes</string>
     <string name="label_no">No</string>
+    <string name="message_added_to_favourites">Added to Favourites</string>
+    
+    <string name="message_already_added_to_favourites">You have already added the recipe to your favourites.</string>
+    <string name="please_wait">Please Wait</string>
 
 
 </resources>
