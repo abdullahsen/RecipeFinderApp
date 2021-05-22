@@ -1,14 +1,7 @@
 package com.abdullahsen.recipefinderapp
 
 import android.app.Application
-import com.abdullahsen.recipefinderapp.data.local.RecipeRoomDatabase
-import com.abdullahsen.recipefinderapp.repository.RecipeRepository
+import dagger.hilt.android.HiltAndroidApp
 
-class RecipeFinderApplication:Application() {
-
-    private val database by lazy {
-        RecipeRoomDatabase.getDatabase(this@RecipeFinderApplication)
-    }
-
-    val repository by lazy { RecipeRepository(database.recipeDao()) }
-}
+@HiltAndroidApp
+class RecipeFinderApplication:Application()

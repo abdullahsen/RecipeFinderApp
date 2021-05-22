@@ -13,16 +13,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.abdullahsen.recipefinderapp.R
-import com.abdullahsen.recipefinderapp.RecipeFinderApplication
 import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.data.remote.model.RandomRecipe
 import com.abdullahsen.recipefinderapp.databinding.FragmentRandomRecipeBinding
 import com.abdullahsen.recipefinderapp.utils.Constants
+import com.abdullahsen.recipefinderapp.utils.RecipeApiStatus
 import com.abdullahsen.recipefinderapp.viewmodel.RandomRecipeViewModel
 import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
-import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModelFactory
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RandomRecipeFragment : Fragment() {
 
     private lateinit var binding: FragmentRandomRecipeBinding
@@ -31,9 +32,7 @@ class RandomRecipeFragment : Fragment() {
 
     private lateinit var progressDialog: Dialog
 
-    private val recipeViewModel: RecipeViewModel by viewModels{
-        RecipeViewModelFactory((requireActivity().application as RecipeFinderApplication).repository)
-    }
+    private val recipeViewModel: RecipeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +42,6 @@ class RandomRecipeFragment : Fragment() {
 
         binding = FragmentRandomRecipeBinding.inflate(inflater, container, false)
 
-
         return binding.root
     }
 
@@ -51,36 +49,23 @@ class RandomRecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        progressDialog = Dialog(requireActivity())
+        progressDialog.setContentView(R.layout.dialog_custom_progress)
+
         randomRecipeViewModel.getRandomRecipeFromApi()
-        randomRecipeViewModel.randomRecipeResponse.observe(viewLifecycleOwner) {
+        randomRecipeViewModel.recipe.observe(viewLifecycleOwner) {
             it?.let {
                 Log.i("Random Recipe Response", "${it.recipes[0]}")
-
-                if(binding.swipeRefreshLayoutRandomRecipe.isRefreshing){
-                    binding.swipeRefreshLayoutRandomRecipe.isRefreshing = false
-                }
-
                 setRandomRecipeResponseInUI(it.recipes[0])
             }
         }
 
-        randomRecipeViewModel.randomRecipeLoadingError.observe(viewLifecycleOwner) {
+        randomRecipeViewModel.status.observe(viewLifecycleOwner){
             it?.let {
-                if (it) Log.e("Random Recipe Error", "$it")
-
-                if(binding.swipeRefreshLayoutRandomRecipe.isRefreshing){
-                    binding.swipeRefreshLayoutRandomRecipe.isRefreshing = false
-                }
-            }
-        }
-
-        randomRecipeViewModel.loadRandomRecipe.observe(viewLifecycleOwner) {
-            it?.let {
-                Log.i("Random Recipe Loading", "$it")
-                if(it && !binding.swipeRefreshLayoutRandomRecipe.isRefreshing){
-                    showCustomProgressDialog()
-                }else{
-                    hideCustomProgressDialog()
+                when(it){
+                    RecipeApiStatus.LOADING -> showCustomProgressDialog()
+                    RecipeApiStatus.ERROR -> hideCustomProgressDialog()
+                    RecipeApiStatus.DONE -> hideCustomProgressDialog()
                 }
             }
         }
@@ -92,17 +77,12 @@ class RandomRecipeFragment : Fragment() {
     }
 
     private fun showCustomProgressDialog(){
-        progressDialog = Dialog(requireActivity())
-        progressDialog.let {
-            it.setContentView(R.layout.dialog_custom_progress)
-            it.show()
-        }
+        progressDialog.show()
     }
 
     private fun hideCustomProgressDialog(){
-        progressDialog.let {
-            it.dismiss()
-        }
+        progressDialog.dismiss()
+        binding.swipeRefreshLayoutRandomRecipe.isRefreshing = false
     }
 
     private fun setRandomRecipeResponseInUI(recipe: RandomRecipe.Recipe) {

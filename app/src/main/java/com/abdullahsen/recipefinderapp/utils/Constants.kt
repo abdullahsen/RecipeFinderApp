@@ -19,7 +19,7 @@ object Constants {
     const val LIMIT_LICENSE = "limitLicense"
     const val TAGS = "tags"
     const val NUMBER = "number"
-    const val API_KEY_VALUE = "Api-Key"
+    const val API_KEY_VALUE = "308577ea92ce47f3881b7cbbe8a9447e"
     const val LIMIT_LICENSE_VALUE = true
     const val TAGS_VALUE = "dessert, vegetarian"
     const val NUMBER_VALUE = 1

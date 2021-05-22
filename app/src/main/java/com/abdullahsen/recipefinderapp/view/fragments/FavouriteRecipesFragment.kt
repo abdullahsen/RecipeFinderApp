@@ -8,21 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.abdullahsen.recipefinderapp.RecipeFinderApplication
 import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.databinding.FragmentFavouriteRecipesBinding
 import com.abdullahsen.recipefinderapp.view.activities.MainActivity
 import com.abdullahsen.recipefinderapp.view.adapters.RecipeAdapter
 import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
-import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavouriteRecipesFragment : Fragment() {
 
     private lateinit var binding: FragmentFavouriteRecipesBinding
 
-    private val recipeViewModel: RecipeViewModel by viewModels {
-        RecipeViewModelFactory((requireActivity().application as RecipeFinderApplication).repository)
-    }
+    private val recipeViewModel: RecipeViewModel by viewModels ()
 
     override fun onCreateView(
         inflater: LayoutInflater,

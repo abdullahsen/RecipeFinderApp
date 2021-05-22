@@ -24,7 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abdullahsen.recipefinderapp.R
-import com.abdullahsen.recipefinderapp.RecipeFinderApplication
 import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.databinding.ActivityAddUpdateRecipeBinding
 import com.abdullahsen.recipefinderapp.databinding.DialogImageSelectionBinding
@@ -32,7 +31,6 @@ import com.abdullahsen.recipefinderapp.databinding.DialogListBinding
 import com.abdullahsen.recipefinderapp.utils.Constants
 import com.abdullahsen.recipefinderapp.view.adapters.ListAdapter
 import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
-import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -47,10 +45,12 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.*
 import java.util.*
 
 
+@AndroidEntryPoint
 class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
@@ -60,9 +60,7 @@ class AddUpdateRecipeActivity : AppCompatActivity(), View.OnClickListener {
         private const val IMAGE_DIRECTORY = "recipefinderapp"
     }
 
-    private val mRecipeViewModel: RecipeViewModel by viewModels {
-        RecipeViewModelFactory((application as RecipeFinderApplication).repository)
-    }
+    private val mRecipeViewModel: RecipeViewModel by viewModels()
 
     private lateinit var mBinding: ActivityAddUpdateRecipeBinding
     private var imagePath: String = ""

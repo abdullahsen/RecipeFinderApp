@@ -3,7 +3,6 @@ package com.abdullahsen.recipefinderapp.view.fragments
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abdullahsen.recipefinderapp.R
-import com.abdullahsen.recipefinderapp.RecipeFinderApplication
 import com.abdullahsen.recipefinderapp.data.local.entities.Recipe
 import com.abdullahsen.recipefinderapp.databinding.DialogListBinding
 import com.abdullahsen.recipefinderapp.databinding.FragmentAllRecipesBinding
@@ -22,17 +20,16 @@ import com.abdullahsen.recipefinderapp.view.activities.MainActivity
 import com.abdullahsen.recipefinderapp.view.adapters.ListAdapter
 import com.abdullahsen.recipefinderapp.view.adapters.RecipeAdapter
 import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModel
-import com.abdullahsen.recipefinderapp.viewmodel.RecipeViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AllRecipesFragment : Fragment() {
 
     private lateinit var binding: FragmentAllRecipesBinding
     private lateinit var recipeAdapter: RecipeAdapter
     private lateinit var customListDialog: Dialog
 
-    private val recipeViewModel: RecipeViewModel by viewModels{
-        RecipeViewModelFactory((requireActivity().application as RecipeFinderApplication).repository)
-    }
+    private val recipeViewModel: RecipeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

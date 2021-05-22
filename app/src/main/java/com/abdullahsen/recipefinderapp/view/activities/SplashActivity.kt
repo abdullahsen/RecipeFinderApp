@@ -12,7 +12,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.abdullahsen.recipefinderapp.R
 import com.abdullahsen.recipefinderapp.databinding.ActivitySplashBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var splashBinding: ActivitySplashBinding

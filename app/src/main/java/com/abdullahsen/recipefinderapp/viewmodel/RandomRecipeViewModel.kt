@@ -1,47 +1,47 @@
 package com.abdullahsen.recipefinderapp.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.abdullahsen.recipefinderapp.data.remote.RandomRecipeApiService
+import androidx.lifecycle.*
 import com.abdullahsen.recipefinderapp.data.remote.model.RandomRecipe
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.abdullahsen.recipefinderapp.repository.RecipeRepository
+import com.abdullahsen.recipefinderapp.utils.RecipeApiStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.Exception
 
-class RandomRecipeViewModel: ViewModel() {
+@HiltViewModel
+class RandomRecipeViewModel @Inject constructor(private val repository: RecipeRepository): ViewModel() {
 
-    private val randomRecipeApiService = RandomRecipeApiService()
+    //val randomRecipeResponse = MutableLiveData<RandomRecipe.Recipes>()
 
-    private val compositeDisposable = CompositeDisposable()
+    // The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<RecipeApiStatus>()
 
-    val loadRandomRecipe = MutableLiveData<Boolean>()
-    val randomRecipeResponse = MutableLiveData<RandomRecipe.Recipes>()
-    val randomRecipeLoadingError = MutableLiveData<Boolean>()
+    // The external immutable LiveData for the request status
+    val status: LiveData<RecipeApiStatus>
+        get() = _status
+
+
+    // Internally, we use a MutableLiveData, because we will be updating the Recipe
+    // with new values
+    private val _recipe = MutableLiveData<RandomRecipe.Recipes>()
+
+    // The external LiveData interface to the property is immutable, so only this class can modify
+    val recipe: LiveData<RandomRecipe.Recipes>
+        get() = _recipe
 
 
     fun getRandomRecipeFromApi(){
-
-        loadRandomRecipe.value = true
-
-        val disposable = randomRecipeApiService.getRandomRecipe()
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object : DisposableSingleObserver<RandomRecipe.Recipes>() {
-                override fun onSuccess(recipes: RandomRecipe.Recipes?) {
-                    loadRandomRecipe.value = false
-                    randomRecipeResponse.value = recipes
-                    randomRecipeLoadingError.value = false
-                }
-
-                override fun onError(e: Throwable?) {
-                    loadRandomRecipe.value = false
-                    randomRecipeLoadingError.value = true
-                }
-
-            })
-        compositeDisposable.add(disposable)
+        viewModelScope.launch {
+            _status.value = RecipeApiStatus.LOADING
+            try {
+                _recipe.value = repository.getRandomRecipe()
+            }catch (e: Exception){
+                e.printStackTrace()
+                _status.value = RecipeApiStatus.ERROR
+            }
+            _status.value = RecipeApiStatus.DONE
+        }
     }
-
 
 }

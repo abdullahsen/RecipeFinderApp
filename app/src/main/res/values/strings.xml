@@ -52,6 +52,7 @@
     
     <string name="message_already_added_to_favourites">You have already added the recipe to your favourites.</string>
     <string name="please_wait">Please Wait</string>
+    <string name="share_recipe">Share Recipe</string>
 
 
 </resources>
